@@ -2,7 +2,7 @@
 # Sourced by the script. chmod 600 — holds secrets.
 
 # S3 destination bucket.
-BUCKET="my-bucket"
+BUCKET="instancebackup"
 
 # Server segment under the bucket. Isolates each host when many servers
 # share one bucket. Empty = use this machine's hostname automatically.
@@ -12,10 +12,10 @@ SERVER_NAME=""
 AWS_ACCESS_KEY_ID="CHANGE_ME"
 AWS_SECRET_ACCESS_KEY="CHANGE_ME"
 
-# Hetzner = generic S3. Falkenstein shown.
+# Hetzner = generic S3. Nuremberg shown.
 PROVIDER="Other"
-REGION="fsn1"
-ENDPOINT="https://fsn1.your-objectstorage.com"
+REGION="nbg1"
+ENDPOINT="https://nbg1.your-objectstorage.com"
 
 # Mode: "sync" = exact 1:1 mirror (deletes remote files not in src).
 #       "copy" = additive, never deletes.

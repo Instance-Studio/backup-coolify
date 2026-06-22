@@ -40,9 +40,9 @@ fi
 
 # ---------- 2. S3 details ----------
 hdr "2/5  Hetzner S3 details"
-BUCKET="$(ask 'Bucket name')"
+BUCKET="$(ask 'Bucket name' instancebackup)"
 SERVER_NAME="$(ask 'Server name (folder under bucket)' "$(hostname -s)")"
-REGION="$(ask 'Region' fsn1)"
+REGION="$(ask 'Region' nbg1)"
 ENDPOINT="$(ask 'Endpoint' "https://${REGION}.your-objectstorage.com")"
 ACCESS_KEY="$(ask 'S3 access key')"
 SECRET_KEY="$(asksecret 'S3 secret key')"

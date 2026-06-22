@@ -26,7 +26,7 @@ cd backup-coolify
 `install.sh` walks five steps:
 
 1. **rclone** — checks it's installed, offers to install.
-2. **S3 details** — bucket, region (`fsn1` = Falkenstein), endpoint (auto from
+2. **S3 details** — bucket, region (`nbg1` = Nuremberg), endpoint (auto from
    region), access key, secret key (hidden input), mode.
 3. **Auto-discovery** — set the scan root + folder-name regex, see a live
    preview of what matches right now. The scan re-runs on _every_ backup, so you
@@ -53,7 +53,7 @@ Key fields:
 | `SERVER_NAME`                                 | Folder under the bucket isolating this host. Empty = hostname. Lets many servers share one bucket without collisions. |
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | Hetzner S3 credentials (console → Object Storage → bucket → S3 credentials).                                          |
 | `PROVIDER`                                    | `Other` for Hetzner (generic S3).                                                                                     |
-| `REGION` / `ENDPOINT`                         | `fsn1` + `https://fsn1.your-objectstorage.com` for Falkenstein.                                                       |
+| `REGION` / `ENDPOINT`                         | `nbg1` + `https://nbg1.your-objectstorage.com` for Nuremberg.                                                         |
 | `MODE`                                        | `sync` = exact 1:1 mirror (deletes remote files not in source). `copy` = additive, never deletes.                     |
 | `KEEP_OLD`                                    | Folder name to archive overwritten/deleted versions. Empty = off.                                                     |
 | `SCAN_ROOT`                                   | Root searched for media folders every run. Default `/data/coolify`.                                                   |
