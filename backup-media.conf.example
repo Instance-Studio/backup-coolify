@@ -1,0 +1,41 @@
+# backup-media.conf — config for backup-media.sh
+# Sourced by the script. chmod 600 — holds secrets.
+
+# S3 destination bucket.
+BUCKET="my-bucket"
+
+# Hetzner S3 credentials.
+AWS_ACCESS_KEY_ID="CHANGE_ME"
+AWS_SECRET_ACCESS_KEY="CHANGE_ME"
+
+# Hetzner = generic S3. Falkenstein shown.
+PROVIDER="Other"
+REGION="fsn1"
+ENDPOINT="https://fsn1.your-objectstorage.com"
+
+# Mode: "sync" = exact 1:1 mirror (deletes remote files not in src).
+#       "copy" = additive, never deletes.
+MODE="sync"
+
+# Keep overwritten/deleted versions in timestamped archive folder. Empty = off.
+KEEP_OLD=""
+
+# Limits / logging.
+BWLIMIT="0"                          # e.g. "10M" = 10 MByte/s cap, 0 = unlimited
+TRANSFERS="8"
+LOG="/var/log/backup-media.log"
+
+# ---- Auto-discovery (runs EVERY backup) ----
+# Root scanned for media folders. New Coolify apps picked up automatically.
+SCAN_ROOT="/data/coolify"
+
+# Folder names to back up (POSIX extended regex, case-insensitive).
+# Matches any dir whose name equals one of these, at any depth under SCAN_ROOT.
+# S3 prefix = path with SCAN_ROOT stripped (keeps app structure unique).
+MEDIA_NAMES="media|uploads?|storage|public|images?|assets|files|attachments|documents"
+
+# Optional manual extras the scan won't find. Format: "LOCAL|S3_PREFIX".
+# Leave empty if not needed.
+EXTRA_PATHS=(
+  # "/var/somewhere/odd-name|misc/odd-name"
+)

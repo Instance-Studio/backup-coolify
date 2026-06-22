@@ -1,0 +1,5 @@
+# secrets — never commit
+backup-media.conf
+
+# logs
+*.log
