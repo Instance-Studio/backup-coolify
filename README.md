@@ -1,6 +1,7 @@
 # backup-coolify
 
-Media backup for Coolify hosts → S3 (Hetzner Object Storage) via [rclone](https://rclone.org).
+Media backup for Coolify hosts → S3 (Hetzner Object Storage) via
+[rclone](https://rclone.org).
 
 **Scans `/data/coolify` for media folders on every run** — new Coolify apps are
 backed up automatically, no reconfigure. Mirrors to one bucket on a cron
@@ -8,16 +9,16 @@ schedule. No `rclone.conf` needed — all settings live in one config file.
 
 ## What's here
 
-| File | Purpose |
-|------|---------|
-| `install.sh` | Interactive setup: prompts for S3 details, scans `/data/coolify` for media folders, writes config, sets perms, installs cron. |
-| `backup-media.sh` | The runtime. Reads config, syncs each path to S3. Run by cron. |
-| `backup-media.conf.example` | Reference config. `install.sh` generates the real `backup-media.conf`. |
+| File                        | Purpose                                                                                                                       |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `install.sh`                | Interactive setup: prompts for S3 details, scans `/data/coolify` for media folders, writes config, sets perms, installs cron. |
+| `backup-media.sh`           | The runtime. Reads config, syncs each path to S3. Run by cron.                                                                |
+| `backup-media.conf.example` | Reference config. `install.sh` generates the real `backup-media.conf`.                                                        |
 
 ## Quick start
 
 ```bash
-git clone <repo-url> backup-coolify
+git clone https://github.com/Instance-Studio/backup-coolify.git backup-coolify
 cd backup-coolify
 ./install.sh
 ```
@@ -28,8 +29,8 @@ cd backup-coolify
 2. **S3 details** — bucket, region (`fsn1` = Falkenstein), endpoint (auto from
    region), access key, secret key (hidden input), mode.
 3. **Auto-discovery** — set the scan root + folder-name regex, see a live
-   preview of what matches right now. The scan re-runs on *every* backup, so
-   you don't pick paths here — new apps are caught automatically.
+   preview of what matches right now. The scan re-runs on _every_ backup, so you
+   don't pick paths here — new apps are caught automatically.
 4. **Write config** — creates `backup-media.conf` (chmod 600).
 5. **Test & schedule** — runs a `--dry-run` on the first path, then optionally
    installs the cron job (default `0 2 * * *` = daily 02:00).
@@ -46,18 +47,18 @@ $EDITOR backup-media.conf
 
 Key fields:
 
-| Field | Notes |
-|-------|-------|
-| `BUCKET` | Hetzner bucket name (globally unique, lowercase). |
-| `SERVER_NAME` | Folder under the bucket isolating this host. Empty = hostname. Lets many servers share one bucket without collisions. |
-| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | Hetzner S3 credentials (console → Object Storage → bucket → S3 credentials). |
-| `PROVIDER` | `Other` for Hetzner (generic S3). |
-| `REGION` / `ENDPOINT` | `fsn1` + `https://fsn1.your-objectstorage.com` for Falkenstein. |
-| `MODE` | `sync` = exact 1:1 mirror (deletes remote files not in source). `copy` = additive, never deletes. |
-| `KEEP_OLD` | Folder name to archive overwritten/deleted versions. Empty = off. |
-| `SCAN_ROOT` | Root searched for media folders every run. Default `/data/coolify`. |
-| `MEDIA_NAMES` | Regex of folder names to back up (`media\|uploads?\|storage\|...`). |
-| `EXTRA_PATHS` | Optional manual `"LOCAL\|S3_PREFIX"` entries the scan won't find. |
+| Field                                         | Notes                                                                                                                 |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `BUCKET`                                      | Hetzner bucket name (globally unique, lowercase).                                                                     |
+| `SERVER_NAME`                                 | Folder under the bucket isolating this host. Empty = hostname. Lets many servers share one bucket without collisions. |
+| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | Hetzner S3 credentials (console → Object Storage → bucket → S3 credentials).                                          |
+| `PROVIDER`                                    | `Other` for Hetzner (generic S3).                                                                                     |
+| `REGION` / `ENDPOINT`                         | `fsn1` + `https://fsn1.your-objectstorage.com` for Falkenstein.                                                       |
+| `MODE`                                        | `sync` = exact 1:1 mirror (deletes remote files not in source). `copy` = additive, never deletes.                     |
+| `KEEP_OLD`                                    | Folder name to archive overwritten/deleted versions. Empty = off.                                                     |
+| `SCAN_ROOT`                                   | Root searched for media folders every run. Default `/data/coolify`.                                                   |
+| `MEDIA_NAMES`                                 | Regex of folder names to back up (`media\|uploads?\|storage\|...`).                                                   |
+| `EXTRA_PATHS`                                 | Optional manual `"LOCAL\|S3_PREFIX"` entries the scan won't find.                                                     |
 
 **How paths are chosen:** every run, `find` matches any directory under
 `SCAN_ROOT` whose name matches `MEDIA_NAMES`. The S3 key is
@@ -91,8 +92,8 @@ accidental delete propagates to the backup.
 Hetzner Object Storage does **not** support S3 bucket versioning, so there is no
 server-side recovery net. If you need one, either:
 
-- set `KEEP_OLD="archive"` to keep timestamped old versions in the bucket
-  (prune them periodically — they grow unbounded), or
+- set `KEEP_OLD="archive"` to keep timestamped old versions in the bucket (prune
+  them periodically — they grow unbounded), or
 - use `MODE="copy"` so the backup is additive and never deletes.
 
 ## Security
