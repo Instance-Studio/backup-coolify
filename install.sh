@@ -41,6 +41,7 @@ fi
 # ---------- 2. S3 details ----------
 hdr "2/5  Hetzner S3 details"
 BUCKET="$(ask 'Bucket name')"
+SERVER_NAME="$(ask 'Server name (folder under bucket)' "$(hostname -s)")"
 REGION="$(ask 'Region' fsn1)"
 ENDPOINT="$(ask 'Endpoint' "https://${REGION}.your-objectstorage.com")"
 ACCESS_KEY="$(ask 'S3 access key')"
@@ -60,7 +61,7 @@ if [ -d "$SCAN_ROOT" ]; then
   while IFS= read -r d; do
     [ -n "$d" ] || continue
     found=$((found+1))
-    printf '  %s%s%s  ->  %s\n' "$c_grn" "$d" "$c_rst" "${d#"$SCAN_ROOT"/}"
+    printf '  %s%s%s  ->  %s\n' "$c_grn" "$d" "$c_rst" "${SERVER_NAME}/${d#"$SCAN_ROOT"/}"
   done < <(find "$SCAN_ROOT" -type d -regextype posix-extended \
              -iregex ".*/(${MEDIA_NAMES})" 2>/dev/null | sort -u)
   [ "$found" -eq 0 ] && say "  ${c_ylw}(none yet — they'll be caught once apps create them)${c_rst}"
@@ -75,6 +76,7 @@ hdr "4/5  Write $CONF"
   echo "# chmod 600 — holds secrets."
   echo
   echo "BUCKET=\"$BUCKET\""
+  echo "SERVER_NAME=\"$SERVER_NAME\""
   echo "AWS_ACCESS_KEY_ID=\"$ACCESS_KEY\""
   echo "AWS_SECRET_ACCESS_KEY=\"$SECRET_KEY\""
   echo

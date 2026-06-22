@@ -4,6 +4,10 @@
 # S3 destination bucket.
 BUCKET="my-bucket"
 
+# Server segment under the bucket. Isolates each host when many servers
+# share one bucket. Empty = use this machine's hostname automatically.
+SERVER_NAME=""
+
 # Hetzner S3 credentials.
 AWS_ACCESS_KEY_ID="CHANGE_ME"
 AWS_SECRET_ACCESS_KEY="CHANGE_ME"

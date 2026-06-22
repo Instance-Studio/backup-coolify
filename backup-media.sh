@@ -14,6 +14,11 @@ CONF="${1:-$SCRIPT_DIR/backup-media.conf}"
 # shellcheck source=/dev/null
 source "$CONF"
 
+# Server segment: isolates each host's backups in the shared bucket.
+# Empty in conf -> fall back to hostname.
+SERVER_NAME="${SERVER_NAME:-$(hostname -s)}"
+BASE="${BUCKET}/${SERVER_NAME}"
+
 # S3 backend flags (defines remote ":s3:" inline).
 S3_FLAGS=(
   --s3-provider "$PROVIDER"
@@ -62,12 +67,12 @@ for entry in "${TARGETS[@]}"; do
   else                                       # scanned path -> prefix from path
     src="$entry"; prefix="${src#"$SCAN_ROOT"/}"
   fi
-  dest=":s3:${BUCKET}/${prefix}"
+  dest=":s3:${BASE}/${prefix}"
 
   [ -d "$src" ] || { echo "[$(date)] SKIP missing: $src" >> "$LOG"; fail=1; continue; }
 
   extra=()
-  [ -n "$KEEP_OLD" ] && extra+=( --backup-dir ":s3:${BUCKET}/${prefix}/${KEEP_OLD}/${STAMP}" )
+  [ -n "$KEEP_OLD" ] && extra+=( --backup-dir ":s3:${BASE}/${prefix}/${KEEP_OLD}/${STAMP}" )
 
   echo "[$(date)] ${MODE} ${src} -> ${dest}" >> "$LOG"
   if rclone "$MODE" "$src" "$dest" "${S3_FLAGS[@]}" "${RUN_FLAGS[@]}" "${extra[@]}"; then

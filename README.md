@@ -49,6 +49,7 @@ Key fields:
 | Field | Notes |
 |-------|-------|
 | `BUCKET` | Hetzner bucket name (globally unique, lowercase). |
+| `SERVER_NAME` | Folder under the bucket isolating this host. Empty = hostname. Lets many servers share one bucket without collisions. |
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | Hetzner S3 credentials (console → Object Storage → bucket → S3 credentials). |
 | `PROVIDER` | `Other` for Hetzner (generic S3). |
 | `REGION` / `ENDPOINT` | `fsn1` + `https://fsn1.your-objectstorage.com` for Falkenstein. |
@@ -59,10 +60,11 @@ Key fields:
 | `EXTRA_PATHS` | Optional manual `"LOCAL\|S3_PREFIX"` entries the scan won't find. |
 
 **How paths are chosen:** every run, `find` matches any directory under
-`SCAN_ROOT` whose name matches `MEDIA_NAMES`. The S3 prefix is that path with
-`SCAN_ROOT` stripped (e.g. `/data/coolify/applications/abc/media` →
-`applications/abc/media`). New apps appear automatically — nothing to edit.
-Widen coverage by adding names to `MEDIA_NAMES`.
+`SCAN_ROOT` whose name matches `MEDIA_NAMES`. The S3 key is
+`<SERVER_NAME>/<path-with-SCAN_ROOT-stripped>`, e.g.
+`/data/coolify/applications/abc/media` on host `web1` →
+`s3://bucket/web1/applications/abc/media`. New apps appear automatically —
+nothing to edit. Widen coverage by adding names to `MEDIA_NAMES`.
 
 ## Running
 
