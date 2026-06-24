@@ -72,7 +72,7 @@ for entry in "${TARGETS[@]}"; do
   [ -d "$src" ] || { echo "[$(date)] SKIP missing: $src" >> "$LOG"; fail=1; continue; }
 
   extra=()
-  [ -n "$KEEP_OLD" ] && extra+=( --backup-dir ":s3:${BASE}/${prefix}/${KEEP_OLD}/${STAMP}" )
+  [ -n "$KEEP_OLD" ] && extra+=( --backup-dir ":s3:${BASE}/${KEEP_OLD}/${STAMP}/${prefix}" )
 
   echo "[$(date)] ${MODE} ${src} -> ${dest}" >> "$LOG"
   if rclone "$MODE" "$src" "$dest" "${S3_FLAGS[@]}" "${RUN_FLAGS[@]}" "${extra[@]}"; then
