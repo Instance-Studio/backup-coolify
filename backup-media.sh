@@ -83,5 +83,15 @@ for entry in "${TARGETS[@]}"; do
   fi
 done
 
+# ---- Prune old archive versions ----
+if [ -n "$KEEP_OLD" ] && [ -n "${ARCHIVE_KEEP_DAYS:-}" ]; then
+  echo "[$(date)] prune archive: delete >${ARCHIVE_KEEP_DAYS}d under :s3:${BASE}/${KEEP_OLD}" >> "$LOG"
+  if ! rclone delete ":s3:${BASE}/${KEEP_OLD}" \
+        --min-age "${ARCHIVE_KEEP_DAYS}d" --rmdirs \
+        "${S3_FLAGS[@]}" "${RUN_FLAGS[@]}"; then
+    echo "[$(date)] WARN archive prune failed" >> "$LOG"
+  fi
+fi
+
 echo "[$(date)] === backup run done (synced=$count fail=$fail) ===" >> "$LOG"
 exit "$fail"

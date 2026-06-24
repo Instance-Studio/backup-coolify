@@ -47,6 +47,12 @@ ENDPOINT="$(ask 'Endpoint' "https://${REGION}.your-objectstorage.com")"
 ACCESS_KEY="$(ask 'S3 access key')"
 SECRET_KEY="$(asksecret 'S3 secret key')"
 MODE="$(ask 'Mode: sync (mirror) or copy (additive)' sync)"
+if [ "$(ask 'Keep overwritten/deleted versions in an archive? (y/n)' y)" = "y" ]; then
+  KEEP_OLD="$(ask 'Archive folder name' .archive)"
+  ARCHIVE_KEEP_DAYS="$(ask 'Delete archived files older than N days (empty = keep forever)' 30)"
+else
+  KEEP_OLD=""; ARCHIVE_KEEP_DAYS=""
+fi
 
 # ---------- 3. scan settings + preview ----------
 hdr "3/5  Auto-discovery"
@@ -85,7 +91,8 @@ hdr "4/5  Write $CONF"
   echo "ENDPOINT=\"$ENDPOINT\""
   echo
   echo "MODE=\"$MODE\""
-  echo "KEEP_OLD=\"\""
+  echo "KEEP_OLD=\"$KEEP_OLD\""
+  echo "ARCHIVE_KEEP_DAYS=\"$ARCHIVE_KEEP_DAYS\""
   echo
   echo "BWLIMIT=\"0\""
   echo "TRANSFERS=\"8\""

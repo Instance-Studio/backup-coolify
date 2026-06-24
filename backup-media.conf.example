@@ -21,8 +21,13 @@ ENDPOINT="https://nbg1.your-objectstorage.com"
 #       "copy" = additive, never deletes.
 MODE="sync"
 
-# Keep overwritten/deleted versions in timestamped archive folder. Empty = off.
-KEEP_OLD=""
+# Keep overwritten/deleted versions in a timestamped archive. Empty = off.
+# Stored top-level per server: <bucket>/<server>/<KEEP_OLD>/<timestamp>/<app path>
+KEEP_OLD=".archive"
+
+# Auto-prune archive: delete archived files older than N days after each run.
+# Empty = keep forever. Needs KEEP_OLD set. Uses rclone, no bucket config.
+ARCHIVE_KEEP_DAYS="30"
 
 # Limits / logging.
 BWLIMIT="0"                          # e.g. "10M" = 10 MByte/s cap, 0 = unlimited
